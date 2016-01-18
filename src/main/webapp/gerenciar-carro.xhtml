@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="template.xhtml">
+	<br></br>
+	<h:form>
+			<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton value="Adicionar" action="#{carroMBean.adicionar}" update="@form"/>
+				<p:commandButton value="Salvar" action="#{carroMBean.salvar}" update="@form"/>
+				<p:commandButton value="Buscar" action="#{carroMBean.buscar}" update="@form"/>
+				<p:commandButton value="Listar" action="#{carroMBean.listar}" update="@form"/>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<br/>
+		<p:messages autoUpdate="true" showDetail="true"/>
+		<br/>
+		<p:fieldset>
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Modelo"/>
+				<p:inputText value="#{carroMBean.carro.modelo}"/>
+				
+				<h:outputLabel value="Fabricante"/>
+				<p:inputText value="#{carroMBean.carro.marca}"/>
+				
+				<h:outputLabel value="Cor"/>
+				<p:inputText value="#{carroMBean.carro.cor}"/>
+				
+				<h:outputLabel value="Ano"/>
+				<p:inputMask mask="9999" value="#{carroMBean.carro.ano}" />
+			</p:panelGrid>
+			
+			<br/>
+			
+			<p:dataTable value="#{carroMBean.carros}" var="carro">
+				<p:column>
+					<p:commandButton value="Editar" action="#{carroMBean.editar}" update="@form">
+					  	<f:setPropertyActionListener target="#{carroMBean.carro}" value="#{carro}" />
+					 </p:commandButton>
+					 <p:commandButton value="Remover" action="#{carroMBean.remover}" update="@form">
+					  	<f:setPropertyActionListener target="#{carroMBean.carro}" value="#{carro}" />
+					 </p:commandButton>
+				</p:column>
+				<p:column headerText="Modelo">
+					<h:outputText value="#{carro.modelo}"/>
+				</p:column>
+				<p:column headerText="Fabricante">
+					<h:outputText value="#{carro.marca}"/>
+				</p:column>
+				<p:column headerText="Cor">
+					<h:outputText value="#{carro.cor}"/>
+				</p:column>
+				<p:column headerText="Ano">
+					<h:outputText value="#{carro.ano}"/>
+				</p:column>
+			</p:dataTable>
+		</p:fieldset>
+	</h:form>
+</ui:decorate>
