@@ -8,7 +8,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import br.com.geraldo.bd.CarDAO;
 import br.com.geraldo.bd.CarroDAO;
+import br.com.geraldo.bd.GenericDAO;
 import br.com.geraldo.entity.Carro;
 import br.com.geraldo.exception.ErroSistema;
 
@@ -18,12 +20,15 @@ public class CarroMBean {
 	
 	private Carro carro = new Carro();
 	private List<Carro> carros = new ArrayList<Carro>();
-	private CarroDAO carDAO = new CarroDAO();
+	//private CarroDAO carDAO = new CarroDAO();
+	private CarDAO carDAO = new CarDAO();
 	private String termo;
+	//private GenericDAO DAO = new GenericDAO();
 	
 	public CarroMBean(){
 		try{
-		carros = carDAO.lista();
+		carros = carDAO.findAll(Carro.class);
+		//carros = DAO.findAll(Carro.class);
 		}catch(Exception ex){
 			adicionarMensagem(ex.getMessage(), ex.getCause().getMessage(), FacesMessage.SEVERITY_ERROR);
 		}
@@ -33,7 +38,7 @@ public class CarroMBean {
 		try{
 			if(validate(carro)){
 				carros.add(carro);
-				carDAO.add(carro);
+				carDAO.save(carro);
 				carro = new Carro();
 				adicionarMensagem("Salvo", "Carro salvo com sucesso!!!", FacesMessage.SEVERITY_INFO);
 			}
@@ -48,7 +53,7 @@ public class CarroMBean {
 				carDAO.update(carro);
 				adicionarMensagem("Alterar", "Carro alterado com sucesso!!!", FacesMessage.SEVERITY_INFO);
 			}else{
-				carros = carDAO.lista();
+				carros = carDAO.findAll(Carro.class);
 			}
 		}catch(Exception ex){
 			adicionarMensagem(ex.getMessage(), ex.getCause().getMessage(), FacesMessage.SEVERITY_ERROR);
@@ -56,7 +61,7 @@ public class CarroMBean {
 	}
 	public void listar(){
 		try{
-			carros = carDAO.lista();
+			carros = carDAO.findAll(Carro.class);
 			if(carros == null || carros.size()<=0){
 				adicionarMensagem("Listar", "Não foram encontrados resultados para sua busca", FacesMessage.SEVERITY_WARN);
 			}
@@ -69,7 +74,7 @@ public class CarroMBean {
 	}
 	public void remover(){
 		try{
-			carDAO.remover(carro);
+			carDAO.delete(carro);
 			carros.remove(carro);
 			adicionarMensagem("Remover", "Removido com sucesso", FacesMessage.SEVERITY_INFO);
 		}catch(Exception ex){
